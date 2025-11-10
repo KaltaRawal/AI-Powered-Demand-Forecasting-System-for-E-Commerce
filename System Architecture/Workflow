@@ -1,0 +1,77 @@
+# ELABORATED SYSTEM ARCHITECTURE: E-COMMERCE FORECASTING PLATFORM 
+The proposed system is an end-to-end data-driven platform, which surmounts the 
+drawbacks of single-model forecasting through its dual-engine approach: combining 
+statistical rigor via SARIMAX with the accuracy of machine learning through XGBoost 
+for high-fidelity predictions at scale. 
+The architecture is divided into three distinct layers: the Data Ingestion Layer, the Core 
+Processing Layer, and the Application & Integration Layer. 
+## (1) Data Ingestion and Storage Layer 
+This layer is responsible for the collection of raw historical data and its transformation 
+into stable, unified datasets that are ready for model training. 
+### (1a) . Data Sources 
+Historical Transactional Data: Raw data from e-commerce platforms, like the Olist/ 
+Kaggle dataset from order items, products, orders, and translations. 
+Exogenous Variables: External inputs at prediction, including Holiday Flags and 
+calendar features (such as Black Friday). 
+### (1b) Data Preprocessing and Unification Module 
+• Cleaning and filtering - Filters non-delivered orders and missing values (e.g., 
+product categories) and duplicates. 
+• Time-Series Alignment: Resamples all transaction data into a consistent Daily 
+frequency, creating continuity that is important for both the SARIMAX and 
+machine learning models. 
+• Pivot Table Creation: This step converts the transactional data into the format 
+required for the Global Model-a wide table with the index as the date and 
+columns as demand for 56 categories of products. 
+• Stationarity Analysis: It performs the Augmented Dickey-Fuller tests, which 
+confirm whether a time series is stationary or non-stationary to allow for correct 
+model parameter selection; for example, SARIMAX differencing term, d. 
+20 
+## 2. Core Processing and Modeling Layer 
+This layer hosts the computational and intellectual core of the system, transforming the 
+data into predictive features and training the dual forecasting engines. 
+### (2a) Feature Engineering Engine 
+This module creates the inputs to model the time dependencies and external influences 
+on sales and demand. 
+• AR Features / Lags: Creates lag features of (t−1,t−2,…) of target variables 
+sales/demand using optimal parameters identified from preliminary analysis; for 
+example, the p order in SARIMA. 
+• Moving Average (MA) Features: It is used to calculate the moving mean 
+statistics over predefined window sizes, for example, 2-day rolling mean, to 
+model the impact of recent average demand. 
+• Temporal Features: Turns date index information into separated features: 
+day_of_week and month. 
+• Exogenous Features: incorporates the is_holiday flag into the feature set for 
+both the total sales and product demand models directly. 
+## (3) Dual Forecasting Engine 
+It is designed to run two different models to ensure robustness and high accuracy, using 
+the XGBoost model as the main predictor.  
+a) SARIMAX Baseline Model 
+Purpose: to define a classic, interpretable baseline. 
+Inputs: Time series data (sales) and exogenous variable - is_holiday. 
+The methodology used is auto_arima identifying optimal orders (p,d,q)×(P,D,Q,s) for 
+the training. 
+QMSE and MAE results, for example RMSE ≈14,462. 
+b) XGBoost Primary Model 
+Purpose: Provide the final high-accuracy forecast. 
+Inputs: Entire set of engineered features including lags, rolling means, temporal, and 
+exogenous. 
+Methodology: Trained as a regression model to predict the total sales target. 
+Examine the results of the RMSE and MAE, for example, RMSE ≈3,303. 
+## (4) Global Demand Model Architecture - Scaling Solution 
+Objective: Forecast demand for more than 56 product categories using a single model 
+instance. Methodology: Trains one XGBoost regressor model where the input features 
+include all the engineered features for all categories, and the target is a multi-output 
+vector with the demand for all 56 categories. This approach ensures scalability and low 
+maintenance overhead. 3. Application and Integration Layer This layer processes the 
+model outputs, converting them into actionable business intelligence for the end-user. 
+### Model Evaluation and Selection Comparative Analysis: This step calculates and 
+stores the final performance metrics, RMSE/MAE, of all models to validate that the 
+XGBoost engine is superior in accuracy. Visualization: Creates comparison plots of 
+actual versus forecast to visually confirm the performance and stability of the model. 
+### Forecasting and Reporting Service Forecast Generation: The fitted XGBoost 
+models are used for a multi-step-ahead forecast, like a 7-day forecast. Actionable  
+insights: Outputs are translated into key business metrics. Daily Sales Projection-for 
+financial planning. Product demand forecasts-for SKU-level inventory planning. 
+Stockout Rate Reduction Estimates. 3.3 Business Integration (API) The final forecasts 
+are delivered via an API endpoint that allows for easy integration into your existing SCM 
+or ERP systems to automate inventory restocking and resource allocation.
