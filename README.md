@@ -1,7 +1,7 @@
 # AI-Powered-Demand-Forecasting-System-for-E-Commerce
 ## Project Overview
 This repository holds a robust Time-Series Forecasting solution that is designed to generate accurate predictions of both total daily sales and daily demand across multiple product categories in an e-commerce platform. The project applies advanced machine learning and statistical techniques to provide actionable insights that are critical to inventory optimization and operational efficiency improvement in the highly competitive landscape of e-commerce.
-# Problem Statement
+## Problem Statement
 Accurate time-series forecasting is crucial for optimizing inventory and supply chain management, reducing costs, and improving customer satisfaction in the highly competitive e-commerce industry. This project aims to:
 
 * Predict daily sales for the e-commerce platform.
@@ -20,4 +20,15 @@ The central goal of this project is to address the challenge of accurate time-se
 * Operational Efficiency - Reduces storage, shipping, and handling costs by aligning inventory levels with forecasted demand.
 * Customer Satisfaction - Lowers the Stockout Rate and ensures product availability for timely deliveries.
 * Business Intelligence	- Provides real-time forecasts to evaluate marketing effectiveness and inform strategic business decision-making.
-
+## Dataset 
+The dataset represents a set of orders done through Olist Store, one of the large e
+commerce platforms in Brazil. This is a normalized dataset with several interlinked 
+tables describing customers, orders, payments, products, sellers, and reviews. 
+Key Files Used: 
+• olist_orders_dataset.csv — Order-level data including order status, timestamps, 
+and delivery information. 
+• olist_order_items_dataset.csv — Product-level details for each order. 
+• olist_customers_dataset.csv — Customer demographic and location data. 
+• olist_products_dataset.csv — Product attributes and category details. 
+• olist_order_payments_dataset.csv — Information on payment type, number of 
+installments, and transaction values.
