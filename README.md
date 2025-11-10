@@ -24,11 +24,26 @@ The central goal of this project is to address the challenge of accurate time-se
 The dataset represents a set of orders done through Olist Store, one of the large e
 commerce platforms in Brazil. This is a normalized dataset with several interlinked 
 tables describing customers, orders, payments, products, sellers, and reviews. 
-Key Files Used: 
-• olist_orders_dataset.csv — Order-level data including order status, timestamps, 
-and delivery information. 
-• olist_order_items_dataset.csv — Product-level details for each order. 
-• olist_customers_dataset.csv — Customer demographic and location data. 
-• olist_products_dataset.csv — Product attributes and category details. 
-• olist_order_payments_dataset.csv — Information on payment type, number of 
-installments, and transaction values.
+## Features and Methodology
+The solution employs a dual-modeling framework, contrasting a classic statistical baseline with a highly effective **Machine Learning** approach, as detailed in the system architecture diagram.
+
+### 1. Data Processing and Feature Engineering
+[cite_start]The reliability of the forecast hinges on high-quality input data and **advanced feature engineering**[cite: 11].
+
+* **Source Data:** Brazilian E-commerce Public Dataset by Olist (Kaggle).
+* [cite_start]**Preprocessing:** Orders were filtered for `delivered` status [cite: 12][cite_start], and multiple transactional tables were **merged** into a **unified time-series format**[cite: 13].
+* **Feature Engineering:**
+    * [cite_start]**Temporal Features:** Extracted `day_of_week` and `month`[cite: 14].
+    * [cite_start]**Autoregressive (AR):** Incorporated **lag features** (e.g., sales from prior days)[cite: 16].
+    * [cite_start]**Moving Average (MA):** Calculated **rolling statistics** (rolling means)[cite: 16].
+    * [cite_start]**Exogenous Variables:** Added **holiday indicators** to capture external demand spikes (e.g., **Black Friday**)[cite: 15].
+
+### 2. Forecasting Models and Architecture
+
+[cite_start]The architecture utilizes a comparative setup to validate the superiority of the **XGBoost** Regressor[cite: 17].
+
+| Forecasting Model | Focus | Key Technique |
+| :--- | :--- | :--- |
+| **SARIMAX** | Statistical Baseline | [cite_start]Accounts for **seasonality** and **trend** with **exogenous variables**[cite: 18]. |
+| **XGBoost** | **Machine Learning** | [cite_start]Designed to **capture complex nonlinear dependencies** using engineered features[cite: 19]. |
+| **Global XGBoost Model** | **Scalability** | [cite_start]Implemented **Multi-Output Regression** to predict demand across **56 product categories** concurrently[cite: 20]. |
