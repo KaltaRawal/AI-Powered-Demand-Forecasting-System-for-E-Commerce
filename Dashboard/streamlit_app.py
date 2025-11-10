@@ -7,15 +7,15 @@ from datetime import timedelta
 import os
 
 # -------------------------------------------------------------
-# 🎯 PAGE CONFIGURATION
+# Page configuration
 # -------------------------------------------------------------
 st.set_page_config(page_title="AI-Powered E-Commerce Forecast Dashboard", layout="wide")
 
-st.title("📈 AI-Powered E-Commerce Demand Forecasting Dashboard")
-st.markdown("#### Analyze past trends and forecast future sales using Machine Learning")
+st.title("AI-Powered E-Commerce Demand Forecasting Dashboard")
+st.markdown("This dashboard analyzes past sales trends and forecasts future demand using a trained machine learning model.")
 
 # -------------------------------------------------------------
-# 📂 LOAD MODEL
+# Load the trained model
 # -------------------------------------------------------------
 model_path = r"C:\Users\kalta\forecast_pipeline.pkl"
 model = None
@@ -23,91 +23,91 @@ model = None
 try:
     if os.path.exists(model_path):
         model = load(model_path)
-        st.sidebar.success("✅ ML Model Loaded Successfully!")
+        st.sidebar.success("Model loaded successfully.")
     else:
-        st.sidebar.warning("⚠️ Model not found, running demo mode")
+        st.sidebar.warning("Model not found. Running in demo mode.")
 except Exception as e:
-    st.sidebar.error(f"❌ Error loading model: {e}")
+    st.sidebar.error(f"Error loading model: {e}")
 
 # -------------------------------------------------------------
-# 📊 LOAD DATA
+# Load dataset
 # -------------------------------------------------------------
-st.sidebar.header("User Input")
+st.sidebar.header("Data Upload")
 
-uploaded_file = st.sidebar.file_uploader("Upload Sales Data (CSV)", type=["csv"])
+uploaded_file = st.sidebar.file_uploader("Upload sales data (CSV)", type=["csv"])
 
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
 else:
-    # Default dataset path (Brazilian E-Commerce)
     default_path = r"C:\Users\kalta\OneDrive\DSA\Documents\Downloads\brazilian-ecommerce (2)"
     try:
         data = pd.read_csv(default_path)
-        st.sidebar.info("📁 Loaded default Brazilian E-commerce dataset")
+        st.sidebar.info("Loaded default Brazilian e-commerce dataset.")
     except:
-        st.info("Using demo dataset (no file found)")
+        st.info("No file found. Using generated sample data.")
         data = pd.DataFrame({
             "Date": pd.date_range(start="2024-01-01", periods=60),
             "Sales": np.random.randint(200, 800, size=60)
         })
 
 # -------------------------------------------------------------
-# 🧹 PREPROCESSING
+# Data preparation
 # -------------------------------------------------------------
 if "Date" not in data.columns:
     data.rename(columns={data.columns[0]: "Date"}, inplace=True)
 
-data["Date"] = pd.to_datetime(data["Date"])
-data = data.sort_values("Date")
+data["Date"] = pd.to_datetime(data["Date"], errors="coerce")
+data = data.dropna(subset=["Date"]).sort_values("Date")
 
-# Ensure there's a 'Sales' column for visualization
 if "Sales" not in data.columns:
     data["Sales"] = np.random.randint(200, 800, len(data))
 
 # -------------------------------------------------------------
-# 📈 HISTORICAL VISUALIZATION
+# Display historical trend
 # -------------------------------------------------------------
-st.subheader("🧮 Historical Sales Trend")
+st.subheader("Historical Sales Trend")
 fig = px.line(data, x="Date", y="Sales", title="Sales Over Time", markers=True)
 st.plotly_chart(fig, use_container_width=True)
 
 # -------------------------------------------------------------
-# 🤖 FORECASTING SECTION
+# Forecasting section
 # -------------------------------------------------------------
-st.subheader("🤖 AI Forecast Results")
+st.subheader("AI Forecast Results")
 
 if model is not None:
     try:
-        # ✅ Generate 15 future dates
+        # Create future dates for prediction
         last_date = data["Date"].max()
         future_dates = pd.date_range(start=last_date + timedelta(days=1), periods=15)
         df_future = pd.DataFrame({"Date": future_dates})
 
-        # ✅ Add time-based features used in training
+        # Create basic time-based features
         df_future["day_of_week"] = df_future["Date"].dt.dayofweek
         df_future["month"] = df_future["Date"].dt.month
         df_future["is_weekend"] = df_future["day_of_week"].isin([5, 6]).astype(int)
-        df_future["is_holiday"] = 0  # placeholder, can be adjusted later
+        df_future["is_holiday"] = 0  # placeholder feature
 
-        # ✅ Match the model’s feature structure
+        # Match model's expected features
         if hasattr(model, "feature_names_in_"):
-            feature_cols = model.feature_names_in_
+            expected_features = list(model.feature_names_in_)
         else:
-            feature_cols = [col for col in df_future.columns if col != "Date"]
+            expected_features = [col for col in df_future.columns if col != "Date"]
 
-        # Fill missing feature columns safely
-        for col in feature_cols:
+        # Add missing columns as zeros
+        for col in expected_features:
             if col not in df_future.columns:
                 df_future[col] = 0
 
-        X_future = df_future[feature_cols]
+        # Keep columns in correct order and ensure numeric values
+        X_future = df_future[expected_features]
+        X_future = X_future.apply(pd.to_numeric, errors="coerce").fillna(0)
 
-        # 🧠 Predict using model
+        # Generate predictions
         forecast = model.predict(X_future)
         forecast_df = pd.DataFrame({"Date": df_future["Date"], "Predicted Sales": forecast})
 
     except Exception as e:
-        st.error(f"⚠️ Model prediction failed: {e}")
+        st.error(f"Model prediction failed: {e}")
         forecast_df = pd.DataFrame({
             "Date": pd.date_range(start=data["Date"].max() + timedelta(days=1), periods=15),
             "Predicted Sales": np.random.randint(400, 800, 15)
@@ -119,7 +119,7 @@ else:
     })
 
 # -------------------------------------------------------------
-# 🔗 COMBINE PAST + FORECAST DATA
+# Combine historical and forecast data
 # -------------------------------------------------------------
 combined = pd.concat([
     data.rename(columns={"Sales": "Predicted Sales"})[["Date", "Predicted Sales"]],
@@ -127,22 +127,23 @@ combined = pd.concat([
 ])
 
 fig2 = px.line(combined, x="Date", y="Predicted Sales",
-               title="📅 Sales Forecast (Next 15 Days)", markers=True)
+               title="Sales Forecast for the Next 15 Days", markers=True)
 st.plotly_chart(fig2, use_container_width=True)
 
 # -------------------------------------------------------------
-# 💡 INSIGHTS SECTION
+# Insights section
 # -------------------------------------------------------------
-st.subheader("💡 Insights")
-avg_sales = data["Sales"].mean()
+st.subheader("Insights")
+
+average_sales = data["Sales"].mean()
 max_sales = data["Sales"].max()
-growth = forecast_df["Predicted Sales"].mean() - avg_sales
+forecast_growth = forecast_df["Predicted Sales"].mean() - average_sales
 
 st.markdown(f"""
-- 📊 **Average Daily Sales:** {avg_sales:.2f}  
-- 🚀 **Peak Sales:** {max_sales:.0f}  
-- 🔮 **Forecasted Growth:** {growth:.2f}  
-- 📅 **Forecast Range:** {forecast_df['Date'].min().date()} → {forecast_df['Date'].max().date()}
+**Average Daily Sales:** {average_sales:.2f}  
+**Peak Sales:** {max_sales:.0f}  
+**Forecasted Growth:** {forecast_growth:.2f}  
+**Forecast Period:** {forecast_df['Date'].min().date()} to {forecast_df['Date'].max().date()}
 """)
 
-st.success("✅ Forecasting complete! Scroll above to explore visual insights.")
+st.success("Forecasting completed. Scroll above to view detailed charts and trends.")
