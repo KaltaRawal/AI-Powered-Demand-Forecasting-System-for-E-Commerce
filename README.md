@@ -11,3 +11,9 @@ Accurate time-series forecasting is crucial for optimizing inventory and supply 
 * Customer Satisfaction Score (CSAT): Ensures product availability for timely deliveries.
 * Operational Costs: Helps control costs related to storage and shipping.
 * Stockout Rate: Reduces the frequency of stockouts, ensuring products are available when needed.
+### Objectives and Core Functionality
+The central goal of this project is to address the challenge of accurate time-series forecasting within a dynamic retail environment.
+#### Total Daily Sales Prediction -
+Forecast the aggregate sales value for the entire e-commerce platform.
+#### Multi-Category Demand Forecasting -
+Predict the daily demand (order count) for individual products grouped into 56 distinct product categories
