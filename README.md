@@ -6,16 +6,16 @@ Accurate time-series forecasting is crucial for optimizing inventory and supply 
 
 * Predict daily sales for the e-commerce platform.
 * Forecast daily demand across multiple product categories.
-### Key Business Metrics
+### 1. Key Business Metrics
 * Inventory Turnover Rate: Measures how quickly inventory is sold and replaced.
 * Customer Satisfaction Score (CSAT): Ensures product availability for timely deliveries.
 * Operational Costs: Helps control costs related to storage and shipping.
 * Stockout Rate: Reduces the frequency of stockouts, ensuring products are available when needed.
-### Objectives and Core Functionality
+### 2. Objectives and Core Functionality
 The central goal of this project is to address the challenge of accurate time-series forecasting within a dynamic retail environment.
 * Total Daily Sales Prediction - Forecast the aggregate sales value for the entire e-commerce platform.
 * Multi-Category Demand Forecasting - Predict the daily demand (order count) for individual products grouped into 56 distinct product categories
-### Business Benefits
+### 3. Business Benefits
 * Inventory Optimization - Reduces risk of over-stocking or under-stocking to maintain optimal stock levels.
 * Operational Efficiency - Reduces storage, shipping, and handling costs by aligning inventory levels with forecasted demand.
 * Customer Satisfaction - Lowers the Stockout Rate and ensures product availability for timely deliveries.
@@ -47,3 +47,16 @@ The architecture utilizes a comparative setup to validate the superiority of the
 | **SARIMAX** | Statistical Baseline | [cite_start]Accounts for **seasonality** and **trend** with **exogenous variables**. |
 | **XGBoost** | **Machine Learning** | [cite_start]Designed to **capture complex nonlinear dependencies** using engineered features. |
 | **Global XGBoost Model** | **Scalability** | [cite_start]Implemented **Multi-Output Regression** to predict demand across **56 product categories** concurrently. |
+## Key Results and Achievements
+The experimental analysis decisively favors the Machine Learning approach for forecasting accuracy. These points are optimized for your resume:
+* Deployed interactive dashboard using Streamlit to visualize real-time forecasting results and enhance Business Intelligence.
+* Maximized Model Predictive Power using Advanced Feature Engineering (lag/rolling mean/exogenous variables) to capture nonlinear sales dynamics.
+* Validated Machine Learning approach (XGBoost) against SARIMAX baseline, reducing RMSE for sales forecasting by $\approx 77\%$ (from $\approx 14,000$ to $\approx 3,000$).
+* Engineered Scalable demand solution using Global XGBoost Model (Multi-Output Regression) to predict 56 product categories with RMSE $1.75$.
+## Reporting and Visualization
+A key output of this project is the AI-Powered Dashboard using Streamlit, which operationalizes the forecasting results. It includes visualizations for:
+* Daily Sales Trends: Plots showcasing raw sales, seasonality, and identified outliers (like Black Friday).
+* ETS Decomposition: Graphs that cleanly separate trend, seasonality, and residuals in the time series data.
+* Forecast Plots: Direct coRmparison of actual vs. predicted sales/demand for model validation and monitoring.
+* Key Business Metrics: Tracking of metrics like Stockout Rate and Inventory Turnover Rate based on forecasts.
+  
