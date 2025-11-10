@@ -28,22 +28,22 @@ tables describing customers, orders, payments, products, sellers, and reviews.
 The solution employs a dual-modeling framework, contrasting a classic statistical baseline with a highly effective **Machine Learning** approach, as detailed in the system architecture diagram.
 
 ### 1. Data Processing and Feature Engineering
-[cite_start]The reliability of the forecast hinges on high-quality input data and **advanced feature engineering**[cite: 11].
+The reliability of the forecast hinges on high-quality input data and **advanced feature engineering.
 
-* **Source Data:** Brazilian E-commerce Public Dataset by Olist (Kaggle).
-* [cite_start]**Preprocessing:** Orders were filtered for `delivered` status [cite: 12][cite_start], and multiple transactional tables were **merged** into a **unified time-series format**[cite: 13].
+* **Source Data:** Brazilian E-commerce Public Dataset by Olist.
+* **Preprocessing:** Orders were filtered for `delivered` status, and multiple transactional tables were **merged** into a **unified time-series format**.
 * **Feature Engineering:**
-    * [cite_start]**Temporal Features:** Extracted `day_of_week` and `month`[cite: 14].
-    * [cite_start]**Autoregressive (AR):** Incorporated **lag features** (e.g., sales from prior days)[cite: 16].
-    * [cite_start]**Moving Average (MA):** Calculated **rolling statistics** (rolling means)[cite: 16].
-    * [cite_start]**Exogenous Variables:** Added **holiday indicators** to capture external demand spikes (e.g., **Black Friday**)[cite: 15].
+    * **Temporal Features:** Extracted `day_of_week` and `month`.
+    * **Autoregressive (AR):** Incorporated **lag features** (e.g., sales from prior days).
+    * **Moving Average (MA):** Calculated **rolling statistics** (rolling means).
+    * **Exogenous Variables:** Added **holiday indicators** to capture external demand spikes (e.g., **Black Friday**).
 
 ### 2. Forecasting Models and Architecture
 
-[cite_start]The architecture utilizes a comparative setup to validate the superiority of the **XGBoost** Regressor[cite: 17].
+The architecture utilizes a comparative setup to validate the superiority of the **XGBoost** Regressor.
 
 | Forecasting Model | Focus | Key Technique |
 | :--- | :--- | :--- |
-| **SARIMAX** | Statistical Baseline | [cite_start]Accounts for **seasonality** and **trend** with **exogenous variables**[cite: 18]. |
-| **XGBoost** | **Machine Learning** | [cite_start]Designed to **capture complex nonlinear dependencies** using engineered features[cite: 19]. |
-| **Global XGBoost Model** | **Scalability** | [cite_start]Implemented **Multi-Output Regression** to predict demand across **56 product categories** concurrently[cite: 20]. |
+| **SARIMAX** | Statistical Baseline | [cite_start]Accounts for **seasonality** and **trend** with **exogenous variables**. |
+| **XGBoost** | **Machine Learning** | [cite_start]Designed to **capture complex nonlinear dependencies** using engineered features. |
+| **Global XGBoost Model** | **Scalability** | [cite_start]Implemented **Multi-Output Regression** to predict demand across **56 product categories** concurrently. |
